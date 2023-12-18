@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %run "./LoadBaseData"
+# MAGIC %run "./LoadBaseDataOnly"
 
 # COMMAND ----------
 
