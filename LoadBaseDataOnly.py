@@ -23,7 +23,7 @@ billing_partition_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
 
-path = "dbfs:/mnt/basedata/unzipped/Customer_information.csv"
+path = "dbfs:/mnt/basedata/unzipped/Customer_information_updated.csv"
 customer_information_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
@@ -33,7 +33,7 @@ customer_rating_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
 
-path = "dbfs:/mnt/basedata/unzipped/Plans.csv"
+path = "dbfs:/mnt/basedata/unzipped/Plans_updated.csv"
 plan_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
