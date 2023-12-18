@@ -69,7 +69,7 @@ print("Cleaned up local files")
 
 # COMMAND ----------
 
-display(dbutils.fs.ls("/mnt/basedata"))
+display(dbutils.fs.ls("/mnt/basedata/unzipped/"))
 
 # COMMAND ----------
 
@@ -94,12 +94,3 @@ plan_df = spark.read.csv(path,header=True,inferSchema=True)
 # COMMAND ----------
 
 device_information_df = spark.read.json("dbfs:/mnt/basedata/unzipped/Device_Information.json")
-
-# COMMAND ----------
-
-import dlt
-from pyspark.sql.functions import *
-
-# COMMAND ----------
-
-
