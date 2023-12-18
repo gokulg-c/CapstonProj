@@ -69,7 +69,11 @@ print("Cleaned up local files")
 
 # COMMAND ----------
 
-display(dbutils.fs.ls("/mnt/basedata"))
+display(dbutils.fs.ls("/mnt/basedata/unzipped/"))
+
+# COMMAND ----------
+
+display(dbutils.fs.ls("/mnt/basedata/unzipped"))
 
 # COMMAND ----------
 
@@ -78,8 +82,25 @@ billing_partition_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
 
+billing_partition_df.printSchema()
+
+# COMMAND ----------
+
 path = "dbfs:/mnt/basedata/unzipped/Customer_information.csv"
 customer_information_df = spark.read.csv(path,header=True,inferSchema=True)
+
+# COMMAND ----------
+
+# Rename the column 'system status' to 'system_status'
+customer_information_df = customer_information_df.withColumnRenamed("system status", "system_status")
+
+# Save the updated DataFrame as a CSV file in the specified path
+output_path = "dbfs:/mnt/basedata/unzipped/Customer_information_updated.csv"
+customer_information_df.write.mode("overwrite").csv(output_path, header=True)
+
+# COMMAND ----------
+
+customer_information_df.printSchema()
 
 # COMMAND ----------
 
@@ -88,18 +109,44 @@ customer_rating_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
 
+customer_rating_df.printSchema()
+
+# COMMAND ----------
+
 path = "dbfs:/mnt/basedata/unzipped/Plans.csv"
 plan_df = spark.read.csv(path,header=True,inferSchema=True)
 
 # COMMAND ----------
 
+renamed_columns = {
+    "Voice Service": "Voice_Service",
+    "Mobile Data": "Mobile_Data",
+    "Spam Detection": "Spam_Detection",
+    "Fraud Prevention": "Fraud_Prevention"
+}
+
+for old_name, new_name in renamed_columns.items():
+    plan_df = plan_df.withColumnRenamed(old_name, new_name)
+
+# Save the modified DataFrame as a CSV file
+output_path = "dbfs:/mnt/basedata/unzipped/Plans_updated.csv"
+plan_df.write.mode("overwrite").csv(output_path, header=True)
+
+# COMMAND ----------
+
+plan_df.printSchema()
+
+# COMMAND ----------
+
 device_information_df = spark.read.json("dbfs:/mnt/basedata/unzipped/Device_Information.json")
+<<<<<<< Updated upstream:LoadBaseData.py
+=======
 
 # COMMAND ----------
 
-import dlt
-from pyspark.sql.functions import *
+device_information_df.printSchema()
 
 # COMMAND ----------
 
 
+>>>>>>> Stashed changes:Capstone /LoadBaseData_Harmo.py
