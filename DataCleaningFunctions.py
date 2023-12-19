@@ -227,3 +227,64 @@ def is_valid_email(email):
 udf_is_valid_email = udf(is_valid_email, StringType())
 
 ##Example use case : df_validated = df.withColumn("Email", udf_is_valid_email("Email"))
+
+# COMMAND ----------
+
+def convert_numerical_to_string(df, column_list):
+    """
+    Convert numerical values to strings in specified columns.
+
+    Parameters:
+    - df: pyspark.sql.DataFrame
+      The input DataFrame.
+    - column_list: list
+      List of column names to operate on.
+
+    Returns:
+    - pyspark.sql.DataFrame
+      DataFrame with numerical values in specified columns converted to strings.
+    """
+    for column in column_list:
+        # Check if the column exists in the DataFrame
+        if column in df.columns:
+            # Check if the column's data type is a numeric type
+            if "int" in str(df.schema[column].dataType) or "double" in str(df.schema[column].dataType):
+                # Convert numerical values to strings
+                df = df.withColumn(column, col(column).cast(StringType()))
+            else:
+                print(f"Column '{column}' is not a numeric type. Skipping conversion.")
+        else:
+            print(f"Column '{column}' does not exist in the DataFrame. Skipping conversion.")
+
+    return df
+
+# COMMAND ----------
+
+def validate_and_mask_phone_number(phone_number):
+    """
+    Check if the phone number is of 10 digits. If not, replace it with "Not Available".
+
+    Parameters:
+    - phone_number: str
+      The phone number to validate.
+
+    Returns:
+    - str
+      The original phone number if valid, or "Not Available" if not valid.
+    """
+    # Remove non-digit characters
+    clean_phone_number = ''.join(c for c in phone_number if c.isdigit())
+
+    # Check if the cleaned phone number has exactly 10 digits
+    if len(clean_phone_number) == 10:
+        return phone_number
+    else:
+        return "Not Available"
+
+# Create a UDF from the validate_and_mask_phone_number function
+udf_validate_and_mask_phone_number = udf(validate_and_mask_phone_number, StringType())
+
+# Apply the UDF to the PhoneNumber column
+# df_validated = df.withColumn("PhoneNumber", udf_validate_and_mask_phone_number("PhoneNumber"))
+
+
